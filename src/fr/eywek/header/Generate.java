@@ -9,7 +9,6 @@ import com.intellij.openapi.command.WriteCommandAction;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import static com.intellij.openapi.actionSystem.CommonDataKeys.VIRTUAL_FILE;
 

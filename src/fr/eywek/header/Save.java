@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 public class Save implements ApplicationComponent {
     public Save() {
