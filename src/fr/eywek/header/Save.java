@@ -30,7 +30,10 @@ public class Save implements ApplicationComponent {
                 String filename = file.getName();
                 while (filename.length() < 51)
                     filename += ' ';
-                String header = "/*   Updated: " + dateFormat.format(date) + " by vtouffet         ###   ########.fr       */\n";
+                String user = "by " + System.getenv("USER");
+                while (user.length() < 20)
+                    user += ' ';
+                String header = "/*   Updated: " + dateFormat.format(date) + " " + user + "###   ########.fr       */\n";
 
                 Runnable runnable = new Runnable() {
                     @Override

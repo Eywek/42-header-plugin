@@ -21,15 +21,24 @@ public class Generate extends AnAction {
         String filename = file.getName();
         while (filename.length() < 51)
             filename += ' ';
+        String user = "By: " + System.getenv("USER") + " " + "<" + System.getenv("MAIL") + ">";
+        while (user.length() < 47)
+            user += ' ';
+        String user2 = "by " + System.getenv("USER");
+        while (user2.length() < 21)
+            user2 += ' ';
+        String user3 = "by " + System.getenv("USER");
+        while (user3.length() < 20)
+            user3 += ' ';
         String header = "/* ************************************************************************** */\n" +
                 "/*                                                                            */\n" +
                 "/*                                                        :::      ::::::::   */\n" +
                 "/*   " + filename + ":+:      :+:    :+:   */\n" +
                 "/*                                                    +:+ +:+         +:+     */\n" +
-                "/*   By: vtouffet <marvin@42.fr>                    +#+  +:+       +#+        */\n" +
+                "/*   " + user + "+#+  +:+       +#+        */\n" +
                 "/*                                                +#+#+#+#+#+   +#+           */\n" +
-                "/*   Created: " + dateFormat.format(date) + " by vtouffet          #+#    #+#             */\n" +
-                "/*   Updated: " + dateFormat.format(date) + " by vtouffet         ###   ########.fr       */\n" +
+                "/*   Created: " + dateFormat.format(date) + " " + user2 + "#+#    #+#             */\n" +
+                "/*   Updated: " + dateFormat.format(date) + " " + user3 + "###   ########.fr       */\n" +
                 "/*                                                                            */\n" +
                 "/* ************************************************************************** */\n";
 
