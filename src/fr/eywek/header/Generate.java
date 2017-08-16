@@ -45,7 +45,7 @@ public class Generate extends AnAction {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                AnActionEvent.getData(LangDataKeys.EDITOR).getDocument().replaceString(0, 891, header);
+                AnActionEvent.getData(LangDataKeys.EDITOR).getDocument().insertString(0, header);
             }
         };
         WriteCommandAction.runWriteCommandAction(getEventProject(AnActionEvent), runnable);
