@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Save implements ApplicationComponent {
     public Save() {
@@ -23,22 +24,29 @@ public class Save implements ApplicationComponent {
         VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
             public void contentsChanged(@NotNull VirtualFileEvent event) {
                 VirtualFile file = event.getFile();
-                if (!file.getExtension().equals("c"))
+                String filename = file.getName();
+                String extension = file.getExtension();
+                if (extension == null && !filename.contains("Makefile"))
+                    return;
+                if (!filename.contains("Makefile") && !extension.equals("c") && !extension.equals("h"))
                     return;
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
-                String filename = file.getName();
                 while (filename.length() < 51)
                     filename += ' ';
                 String user = "by " + System.getenv("USER");
                 while (user.length() < 20)
                     user += ' ';
-                String header = "/*   Updated: " + dateFormat.format(date) + " " + user + "###   ########.fr       */\n";
+                String header;
+                if (filename.contains("Makefile"))
+                    header = "#    Updated: " + dateFormat.format(date) + " " + user + "###   ########.fr        #\n";
+                else
+                    header = "/*   Updated: " + dateFormat.format(date) + " " + user + "###   ########.fr       */\n";
 
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        FileDocumentManager.getInstance().getDocument(file).replaceString(648, 648 + 81, header);
+                        FileDocumentManager.getInstance().getDocument(file).replaceString(648, 648 + header.length(), header);
                     }
                 };
                 WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getOpenProjects()[0], runnable);

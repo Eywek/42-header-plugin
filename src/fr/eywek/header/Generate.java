@@ -9,12 +9,15 @@ import com.intellij.openapi.command.WriteCommandAction;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import static com.intellij.openapi.actionSystem.CommonDataKeys.VIRTUAL_FILE;
 
-public class Generate extends AnAction {
+public class Generate extends AnAction
+{
     @Override
-    public void actionPerformed(AnActionEvent AnActionEvent) {
+    public void actionPerformed(AnActionEvent AnActionEvent)
+    {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         VirtualFile file = AnActionEvent.getData(VIRTUAL_FILE);
@@ -30,21 +33,30 @@ public class Generate extends AnAction {
         String user3 = "by " + System.getenv("USER");
         while (user3.length() < 20)
             user3 += ' ';
-        String header = "/* ************************************************************************** */\n" +
-                "/*                                                                            */\n" +
-                "/*                                                        :::      ::::::::   */\n" +
-                "/*   " + filename + ":+:      :+:    :+:   */\n" +
-                "/*                                                    +:+ +:+         +:+     */\n" +
-                "/*   " + user + "+#+  +:+       +#+        */\n" +
-                "/*                                                +#+#+#+#+#+   +#+           */\n" +
-                "/*   Created: " + dateFormat.format(date) + " " + user2 + "#+#    #+#             */\n" +
-                "/*   Updated: " + dateFormat.format(date) + " " + user3 + "###   ########.fr       */\n" +
-                "/*                                                                            */\n" +
-                "/* ************************************************************************** */\n";
+        String startComment = "/*";
+        String endComment = "*/";
+        if (filename.contains("Makefile"))
+        {
+            startComment = "#";
+            endComment = "#";
+        }
+        String header = startComment + " " + (startComment.length() == 1 ? "*" : "") + "**************************************************************************" + (endComment.length() == 1 ? "*" : "") + " " + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "                                                                            " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "                                                        :::      ::::::::   " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "   " + filename + ":+:      :+:    :+:   " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "                                                    +:+ +:+         +:+     " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "   " + user + "+#+  +:+       +#+        " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "                                                +#+#+#+#+#+   +#+           " + (endComment.length() == 1 ? ' ': "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "   Created: " + dateFormat.format(date) + " " + user2 + "#+#    #+#             " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? " " : "") + "   Updated: " + dateFormat.format(date) + " " + user3 + "###   ########.fr       " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + (startComment.length() == 1 ? ' ' : "") + "                                                                            " + (endComment.length() == 1 ? " ": "") + endComment + "\n" +
+                startComment + " " + (startComment.length() == 1 ? "*" : "") + "**************************************************************************" + (endComment.length() == 1 ? "*" : "") + " " + endComment + "\n";
 
-        Runnable runnable = new Runnable() {
+        Runnable runnable = new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 AnActionEvent.getData(LangDataKeys.EDITOR).getDocument().insertString(0, header);
             }
         };
