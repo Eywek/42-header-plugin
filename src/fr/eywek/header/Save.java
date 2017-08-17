@@ -4,6 +4,7 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
@@ -28,6 +29,9 @@ public class Save implements ApplicationComponent {
                 if (extension == null && !filename.contains("Makefile"))
                     return;
                 if (!filename.contains("Makefile") && !extension.equals("c") && !extension.equals("h"))
+                    return;
+                String start = FileDocumentManager.getInstance().getDocument(file).getText(new TextRange(0, 5));
+                if (!start.equals("/* **") && !start.equals("# ***"))
                     return;
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
