@@ -23,7 +23,7 @@ public class Generate extends AnAction
         String filename = file.getName();
         while (filename.length() < 51)
             filename += ' ';
-        String user = "By: " + System.getenv("USER") + " " + "<" + System.getenv("MAIL") + ">";
+        String user = "By: " + System.getenv("USER") + " " + "<" + System.getenv("USER") + "@student.42.fr>";
         while (user.length() < 47)
             user += ' ';
         String user2 = "by " + System.getenv("USER");
