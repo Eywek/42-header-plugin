@@ -1,4 +1,4 @@
-package fr.eywek.header;
+package fr.eywek.header.actions;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -9,14 +9,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import fr.eywek.header.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Save implements ApplicationComponent {
-    public Save() {
+public class SaveAction implements ApplicationComponent {
+
+    protected AppSettingsState state;
+
+    public SaveAction()
+    {
+        state = AppSettingsState.getInstance().getState();
     }
 
     @Override
@@ -26,6 +32,7 @@ public class Save implements ApplicationComponent {
                 VirtualFile file = event.getFile();
                 String filename = file.getName();
                 String extension = file.getExtension();
+                String username = state.username;
                 if (extension == null && !filename.contains("Makefile"))
                     return;
                 if (!filename.contains("Makefile") && !extension.equals("c") && !extension.equals("h"))
@@ -37,7 +44,7 @@ public class Save implements ApplicationComponent {
                 Date date = new Date();
                 while (filename.length() < 51)
                     filename += ' ';
-                String user = "by " + System.getenv("USER");
+                String user = "by " + username;
                 while (user.length() < 20)
                     user += ' ';
                 String header;
