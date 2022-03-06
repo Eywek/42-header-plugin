@@ -17,8 +17,8 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
+    version = '2021.3.2'
     type = 'CL'
-    localPath = '/home/fvarrin/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/213.6777.58'
 }
 
 patchPluginXml {
