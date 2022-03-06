@@ -3,6 +3,7 @@ package fr.eywek.header.services;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
+import fr.eywek.header.settings.AppSettingsState;
 
 public class CheckerService {
 
@@ -27,4 +28,11 @@ public class CheckerService {
         return (false);
     }
 
+    public boolean checkIfHasUsername(AppSettingsState state)
+    {
+        if (state.username.isEmpty() || state.username.isBlank() || state.username == null)
+            return (false);
+
+        return (true);
+    }
 }

@@ -46,4 +46,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
         XmlSerializerUtil.copyBean(state, this);
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

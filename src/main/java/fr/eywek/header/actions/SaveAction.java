@@ -10,6 +10,7 @@ import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import fr.eywek.header.services.CheckerService;
 import fr.eywek.header.services.GeneratorService;
+import fr.eywek.header.services.InputService;
 import fr.eywek.header.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 
