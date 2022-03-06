@@ -4,25 +4,26 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import fr.eywek.header.services.CheckerService;
+import fr.eywek.header.services.GeneratorService;
 import fr.eywek.header.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class SaveAction implements ApplicationComponent {
 
     protected AppSettingsState state;
+    protected GeneratorService generatorService;
+    protected CheckerService checkerService;
 
     public SaveAction()
     {
         state = AppSettingsState.getInstance().getState();
+        generatorService = new GeneratorService();
+        checkerService = new CheckerService();
     }
 
     @Override
@@ -30,28 +31,13 @@ public class SaveAction implements ApplicationComponent {
         VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
             public void contentsChanged(@NotNull VirtualFileEvent event) {
                 VirtualFile file = event.getFile();
-                String filename = file.getName();
-                String extension = file.getExtension();
                 String username = state.username;
-                if (extension == null && !filename.contains("Makefile"))
-                    return;
-                if (!filename.contains("Makefile") && !extension.equals("c") && !extension.equals("h"))
-                    return;
-                String start = FileDocumentManager.getInstance().getDocument(file).getText(new TextRange(0, 5));
-                if (!start.equals("/* **") && !start.equals("# ***"))
-                    return;
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                Date date = new Date();
-                while (filename.length() < 51)
-                    filename += ' ';
-                String user = "by " + username;
-                while (user.length() < 20)
-                    user += ' ';
-                String header;
-                if (filename.contains("Makefile"))
-                    header = "#    Updated: " + dateFormat.format(date) + " " + user + "###   ########.fr        #\n";
-                else
-                    header = "/*   Updated: " + dateFormat.format(date) + " " + user + "###   ########.fr       */\n";
+
+                if (!checkerService.checkIsRightFileType(file)) return;
+                if (!checkerService.checkIfHasHeader(file)) return;
+
+                String header = generatorService.changeHeader(file, username);
+                if (header == null) return;;
 
                 Runnable runnable = new Runnable() {
                     @Override
