@@ -38,7 +38,7 @@ public class SaveAction implements ApplicationComponent {
                 if (!checkerService.checkIfHasHeader(file)) return;
 
                 String header = generatorService.changeHeader(file, username);
-                if (header == null) return;;
+                if (header == null) return;
 
                 Runnable runnable = new Runnable() {
                     @Override

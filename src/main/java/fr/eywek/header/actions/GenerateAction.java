@@ -43,6 +43,8 @@ public class GenerateAction extends AnAction
         String mail = state.mail;
 
         String header = this.generatorService.generateHeader(filename, username, mail);
+        if (header == null) return;
+
         Runnable runnable = new Runnable()
         {
             @Override
