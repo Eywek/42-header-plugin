@@ -21,6 +21,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     public String username;
     public String mail;
+    public boolean automaticAdd;
 
     AppSettingsState()
     {
@@ -29,6 +30,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
        mail = System.getenv("MAIL");
        if (mail.isEmpty()) mail = username + "@student.42.fr";
+
+       automaticAdd = false;
     }
 
     public static AppSettingsState getInstance() {

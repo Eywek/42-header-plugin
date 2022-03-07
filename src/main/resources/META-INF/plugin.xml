@@ -1,18 +1,22 @@
 <idea-plugin>
   <id>fr.eywek.header</id>
   <name>42Header</name>
-  <version>1.0</version>
+  <version>1.1</version>
   <vendor email="contact@eywek.fr" url="https://eywek.fr">Eywek</vendor>
 
   <description><![CDATA[
-      Add 42 header to c files or to a Makefile
+      Add 42 header to c files or to a Makefile. <br/>
+      Can be triggered from the `Tools` menu or by pressing `ctrl + alt + a`.
+
+      Configuration is available in the settings to change username or mail (by default fulfilled from env variables).
+      Can also be configured to automatically add header to `.c` and `.h` files.
     ]]></description>
 
   <change-notes><![CDATA[
     ]]>
   </change-notes>
 
-  <idea-version since-build="145.0"/>
+  <idea-version since-build="CL-212"/>
 
   <depends>com.intellij.modules.lang</depends>
 
@@ -20,7 +24,7 @@
   </extensions>
 
   <actions>
-    <action id="fr.eywek.header.Generate" class="fr.eywek.header.actions.GenerateAction" text="Add 42 header"
+    <action id="fr.eywek.header.Generate" class="fr.eywek.header.actions.GenerateAction" text="Add 42 Header"
             description="Add 42 header">
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt A"/>
       <add-to-group group-id="ToolsMenu" anchor="first"/>
@@ -32,12 +36,16 @@
             serviceImplementation="fr.eywek.header.settings.AppSettingsState"/>
     <applicationConfigurable parentId="tools" instance="fr.eywek.header.settings.AppSettingsConfigurable"
                              id="org.intellij.sdk.settings.AppSettingsConfigurable"
-                             displayName="42 Header configuration"/>
+                             displayName="42 Header"/>
   </extensions>
 
   <application-components>
     <component>
             <implementation-class>fr.eywek.header.actions.SaveAction</implementation-class>
-        </component>
-    </application-components>
+    </component>
+
+    <component>
+      <implementation-class>fr.eywek.header.actions.AddAction</implementation-class>
+    </component>
+  </application-components>
 </idea-plugin>

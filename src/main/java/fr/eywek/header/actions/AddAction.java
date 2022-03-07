@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class SaveAction implements ApplicationComponent {
+public class AddAction implements ApplicationComponent {
 
     protected AppSettingsState state;
     protected GeneratorService generatorService;
     protected CheckerService checkerService;
 
-    public SaveAction()
+    public AddAction()
     {
         state = AppSettingsState.getInstance().getState();
         generatorService = new GeneratorService();
@@ -31,25 +31,22 @@ public class SaveAction implements ApplicationComponent {
     @Override
     public void initComponent() {
         VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileListener() {
-            public void contentsChanged(@NotNull VirtualFileEvent event) {
+            @Override
+            public void fileCreated(@NotNull VirtualFileEvent event) {
                 VirtualFile file = event.getFile();
 
-                String username = state.username;
-
                 if (!checkerService.checkIsRightFileType(file)) return;
-                if (!checkerService.checkIfHasHeader(file)) return;
+                if (!state.automaticAdd) return;
 
-                String updatedLine = generatorService.updateLineUpdated(file, username);
-                if (updatedLine == null) return;
+                String filename = file.getName();
+                String username = state.username;
+                String mail = state.mail;
 
-                Runnable updatedRunnable = () -> Objects.requireNonNull(FileDocumentManager.getInstance().getDocument(file)).replaceString(648, 648 + updatedLine.length(), updatedLine);
-                WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getOpenProjects()[0], updatedRunnable);
+                String header = generatorService.generateHeader(filename, username, mail);
+                if (header == null) return;
 
-                String filenameLine = generatorService.updateLineFilename(file);
-                if (filenameLine == null) return;
-
-                Runnable filenameRunnable = () -> Objects.requireNonNull(FileDocumentManager.getInstance().getDocument(file)).replaceString(243, 243 + filenameLine.length(), filenameLine);
-                WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getOpenProjects()[0], filenameRunnable);
+                Runnable runnable = () -> Objects.requireNonNull(FileDocumentManager.getInstance().getDocument(file)).insertString(0, header);
+                WriteCommandAction.runWriteCommandAction(ProjectManager.getInstance().getOpenProjects()[0], runnable);
             }
         });
     }

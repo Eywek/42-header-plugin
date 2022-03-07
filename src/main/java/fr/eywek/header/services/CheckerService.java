@@ -1,5 +1,6 @@
 package fr.eywek.header.services;
 
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -13,26 +14,22 @@ public class CheckerService {
         String extension = file.getExtension();
         if (extension == null && !filename.contains("Makefile"))
             return (false);
-        if (!filename.contains("Makefile") && !extension.equals("c") && !extension.equals("h"))
-            return (false);
-
-        return (true);
+        if (extension == null) return (false);
+        return filename.contains("Makefile") || extension.equals("c") || extension.equals("h");
     }
 
     public boolean checkIfHasHeader(VirtualFile file)
     {
-        String start = FileDocumentManager.getInstance().getDocument(file).getText(new TextRange(0, 5));
-        if (start.equals("/* **") || start.equals("# ***"))
-            return (true);
+        Document document = FileDocumentManager.getInstance().getDocument(file);
+        if (document == null) return (false);
+        if (document.getText().length() < 5) return (false);
 
-        return (false);
+        String start = document.getText(new TextRange(0, 5));
+        return start.equals("/* **") || start.equals("# ***");
     }
 
     public boolean checkIfHasUsername(AppSettingsState state)
     {
-        if (state.username.isEmpty() || state.username.isBlank() || state.username == null)
-            return (false);
-
-        return (true);
+        return !state.username.isEmpty() && !state.username.isBlank() && state.username != null;
     }
 }

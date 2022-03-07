@@ -16,7 +16,7 @@ public class AppSettingsConfigurable implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "42 Header configuration";
+        return "42 Header";
     }
 
     @Override
@@ -36,6 +36,7 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = !appSettingsComponent.getUserNameText().equals(settings.username);
         modified |= !appSettingsComponent.getMailText().equals(settings.mail);
+        modified |= !appSettingsComponent.getAutomaticAddCheckbox() == settings.automaticAdd;
         return modified;
     }
 
@@ -44,6 +45,7 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.username = appSettingsComponent.getUserNameText();
         settings.mail = appSettingsComponent.getMailText();
+        settings.automaticAdd = appSettingsComponent.getAutomaticAddCheckbox();
     }
 
     @Override
@@ -51,6 +53,7 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         appSettingsComponent.setUserNameText(settings.username);
         appSettingsComponent.setMailText(settings.mail);
+        appSettingsComponent.setAutomaticAddCheckbox(settings.automaticAdd);
     }
 
     @Override
