@@ -1,2 +1,4 @@
-.idea/*
+.idea
 42header.iml
+.gradle
+build
